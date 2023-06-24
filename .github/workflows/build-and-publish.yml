@@ -68,7 +68,7 @@ jobs:
         with:
           images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
           tags: |
-            type=raw,value=latest,enable=${{ matrix.version == "14" }}
+            type=raw,value=latest,enable=${{ matrix.version == '14'}}
             ${{ matrix.version }}
 
       # Build and push Docker image with Buildx (don't push on PR)
