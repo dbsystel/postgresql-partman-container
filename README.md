@@ -7,8 +7,11 @@ It pushes a nightly latest image to ghcr.io
 ## Usage
 
 ```
-docker run ghcr.io/dbsystel/postgresql-partman:latest
+docker run ghcr.io/dbsystel/postgresql-partman:13
+docker run ghcr.io/dbsystel/postgresql-partman:14
 ```
+
+The tags represent the postgresql major version. They will contain the latest available pg_partman version that was available at build time.
 
 ## License
 
