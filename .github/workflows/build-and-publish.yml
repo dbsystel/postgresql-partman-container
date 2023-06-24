@@ -24,7 +24,7 @@ jobs:
   build:
     strategy:
       matrix:
-        version: [13, 14]
+        version: [13, 14, 15]
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -68,7 +68,7 @@ jobs:
         with:
           images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
           tags: |
-            type=raw,value=latest,enable=${{ matrix.version == '14'}}
+            type=raw,value=latest,enable=${{ matrix.version == '15'}}
             ${{ matrix.version }}
 
       # Build and push Docker image with Buildx (don't push on PR)
