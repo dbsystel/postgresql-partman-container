@@ -24,7 +24,7 @@ jobs:
   build:
     strategy:
       matrix:
-        version: [13, 14, 15]
+        version: [13, 14, 15, 16]
     runs-on: ubuntu-latest
     permissions:
       contents: read
