@@ -10,8 +10,6 @@ on:
     - cron: '18 2 * * *'
   push:
     branches: [ "main" ]
-    # Publish semver tags as releases.
-    tags: [ 'v*.*.*' ]
   pull_request:
     branches: [ "main" ]
 
@@ -24,7 +22,20 @@ jobs:
   build:
     strategy:
       matrix:
-        version: [13, 14, 15, 16]
+        postgres_version: [13, 14, 15, 16]
+        major: [4,5]
+        include:
+          - partman_version: v4.7.4
+            partman_checksum: 28e4fdb83ecc16525959ae9593bfbfd077db429285f5f7d8e2468bfff6cbdbf2c81ace79a9ddeb4f00f51eb709163dbd713fe6b221a432ac2ff766f98d4cf8e4
+            default: "true"
+            major: 4
+          - partman_version: v5.0.0
+            partman_checksum: 7a1b41732eb063a94cee7a589a252055e3a33ccf0ddfe5cddba22978ffd306cf263312b172355c930d355aea0f5f5530fd2344520791df9cb05a38614c521f9f
+            default: "false"
+            major: 5
+        exclude:
+          - major: 5
+            postgres_version: 13 # partman 5.x does not support postgres 13
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -68,8 +79,9 @@ jobs:
         with:
           images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
           tags: |
-            type=raw,value=latest,enable=${{ matrix.version == '15'}}
-            ${{ matrix.version }}
+            type=raw,value=latest,enable=${{ matrix.postgres_version == '15' && matrix.default == 'true' }}
+            type=raw,value=${{ matrix.postgres_version }},enable=${{ matrix.default == 'true'}}
+            ${{ matrix.postgres_version }}-${{ matrix.major }}
 
       # Build and push Docker image with Buildx (don't push on PR)
       # https://github.com/docker/build-push-action
@@ -79,7 +91,9 @@ jobs:
         with:
           context: .
           build-args: |
-            POSTGRESQL_VERSION=${{ matrix.version }}
+            POSTGRESQL_VERSION=${{ matrix.postgres_version }}
+            PARTMAN_VERSION=${{ matrix.partman_version }}
+            PARTMAN_CHECKSUM=${{ matrix.partman_checksum }}
           platforms: linux/amd64,linux/arm64
           push: ${{ github.event_name != 'pull_request' }}
           tags: ${{ steps.meta.outputs.tags }}
