@@ -2,6 +2,9 @@ ARG POSTGRESQL_VERSION="13"
 FROM bitnami/postgresql:$POSTGRESQL_VERSION
 LABEL org.opencontainers.image.source="https://github.com/dbsystel/postgresql-partman-container"
 ARG PARTMAN_VERSION="v4.7.4"
+LABEL de.dbsystel.partman-version=$PARTMAN_VERSION
+ARG POSTGRESQL_VERSION
+LABEL de.dbsystel.postgres-version=$POSTGRESQL_VERSION
 ARG PARTMAN_CHECKSUM="28e4fdb83ecc16525959ae9593bfbfd077db429285f5f7d8e2468bfff6cbdbf2c81ace79a9ddeb4f00f51eb709163dbd713fe6b221a432ac2ff766f98d4cf8e4"
 USER root
 RUN install_packages wget gcc make build-essential
