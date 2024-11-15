@@ -82,7 +82,7 @@ jobs:
 
       # Build and push Docker image with Buildx (don't push on PR)
       # https://github.com/docker/build-push-action
-      - name: Build and push Docker image
+      - name: Build Docker image
         id: build-and-push
         uses: docker/build-push-action@v5
         with:
@@ -92,22 +92,44 @@ jobs:
             PARTMAN_VERSION=${{ matrix.partman_version }}
             PARTMAN_CHECKSUM=${{ matrix.partman_checksum }}
           platforms: linux/amd64,linux/arm64
-          push: ${{ github.event_name != 'pull_request' }}
+          push: false
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+          load: true
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+
+      - name: Smoke Test - Start and Check Database
+        run: |
+          docker run -d --name postgres-test -e POSTGRES_PASSWORD=mysecretpassword ${{env.REGISTRY}}/${{env.IMAGE_NAME}}:${{ matrix.postgres_version }}-${{ matrix.major }}
+          sleep 10
+          docker exec postgres-test pg_isready -U postgres
+          docker stop postgres-test
+          docker rm postgres-test
+
+      - name: Push Docker Image
+        if: ${{ success() && github.event_name != 'pull_request' }}
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          build-args: |
+            POSTGRESQL_VERSION=${{ matrix.postgres_version }}
+            PARTMAN_VERSION=${{ matrix.partman_version }}
+            PARTMAN_CHECKSUM=${{ matrix.partman_checksum }}
+          platforms: linux/amd64,linux/arm64
+          push: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
-
-
+          
       # Sign the resulting Docker image digest except on PRs.
       # This will only write to the public Rekor transparency log when the Docker
       # repository is public to avoid leaking data.  If you would like to publish
       # transparency data ev en for private images, pass --force to cosign below.
       # https://github.com/sigstore/cosign
       - name: Sign the published Docker image
-        if: ${{ github.event_name != 'pull_request' }}
+        if: ${{ success() && github.event_name != 'pull_request' }}
         env:
           COSIGN_EXPERIMENTAL: "true"
-        # This step uses the identity token to provision an ephemeral certificate
-        # against the sigstore community Fulcio instance.
-        run: echo "${{ steps.meta.outputs.tags }}" | xargs -I {} cosign sign -y {}@${{ steps.build-and-push.outputs.digest }}
+        run: echo "${{ steps.meta.outputs.tags }}" | xargs -I {} cosign sign -y {}@${{ steps.build.outputs.digest }}
