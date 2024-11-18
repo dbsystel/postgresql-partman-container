@@ -50,7 +50,6 @@ jobs:
 
       # Login against a Docker registry except on PR
       - name: Log into registry ${{ env.REGISTRY }}
-        if: github.event_name != 'pull_request'
         uses: docker/login-action@v3
         with:
           registry: ${{ env.REGISTRY }}
@@ -69,8 +68,8 @@ jobs:
             ${{ matrix.postgres_version }}-${{ matrix.major }}
 
       # Build and push Docker image with Buildx, using only the digest
-      - name: Build and push Docker image
-        id: build-and-push
+      - name: Build and push Docker image with digest
+        id: build-and-push-digest
         uses: docker/build-push-action@v5
         with:
           context: .
@@ -90,7 +89,7 @@ jobs:
         env:
           POSTGRES_PASSWORD: examplepassword
         run: |
-          DIGEST=${{ steps.build-and-push.outputs.digest }}
+          DIGEST=${{ steps.build-and-push-digest.outputs.digest }}
           docker run -d --name test-db -e POSTGRES_PASSWORD=$POSTGRES_PASSWORD ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}@$DIGEST
           sleep 30
           docker exec test-db pg_isready -U postgres
@@ -98,8 +97,8 @@ jobs:
           docker rm test-db
 
         # Build and push Docker image with Buildx,this time using the final tags
-      - name: Build and push Docker image
-        id: build-and-push
+      - name: Build and push Docker image with final tags (release)
+        id: build-and-push-release
         if: github.event_name != 'pull_request'
         uses: docker/build-push-action@v5
         with:
