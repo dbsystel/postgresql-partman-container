@@ -120,7 +120,7 @@ jobs:
         env:
           COSIGN_EXPERIMENTAL: "true"
         run: |
-          DIGEST=${{ steps.build-and-push.outputs.digest }}
+          DIGEST=${{ steps.build-and-push-release.outputs.digest }}
           TAGS=$(echo ${{ steps.meta.outputs.tags }} | tr ',' '\n')
           for TAG in $TAGS; do
             cosign sign -y ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:$TAG
