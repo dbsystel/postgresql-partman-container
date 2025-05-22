@@ -38,7 +38,6 @@ ARG POSTGRESQL_VERSION
 LABEL de.dbsystel.postgres-version=$POSTGRESQL_VERSION
 
 COPY --from=builder pg_jobmon-${JOBMON_VERSION#v}/sql/pg_jobmon--${JOBMON_VERSION#v}.sql pg_jobmon-${JOBMON_VERSION#v}/pg_jobmon.control pg_partman-${PARTMAN_VERSION#v}/sql/pg_partman--${PARTMAN_VERSION#v}.sql pg_partman-${PARTMAN_VERSION#v}/pg_partman.control /opt/bitnami/postgresql/share/extension/
-# COPY --from=builder /opt/bitnami/lib/postgresql/${POSTGRESQL_VERSION}/lib/bitcode/src /opt/bitnami/lib/postgresql/${POSTGRESQL_VERSION}/lib/bitcode/src
 COPY --from=builder /opt/bitnami/postgresql/lib/pg_partman_bgw.so /opt/bitnami/postgresql/lib/pg_partman_bgw.so
 COPY --from=builder pg_partman-${PARTMAN_VERSION#v}/bin/common/* /opt/bitnami/lib/postgresql/bin/
 
