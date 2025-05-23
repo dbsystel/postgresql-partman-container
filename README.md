@@ -1,6 +1,6 @@
 # PostgreSQL container image with pg_partman
 
-This repo is meant to provide an OCI (Docker) container image that is based on the popular [bitnami/postgresql](https://hub.docker.com/r/bitnami/postgresql) image, that comes preinstalled with the [pg_partman](https://github.com/pgpartman/pg_partman) PostgreSQL extension.
+This repo is meant to provide an OCI (Docker) container image that is based on the popular [bitnami/postgresql](https://hub.docker.com/r/bitnami/postgresql) image, that comes preinstalled with the [pg_partman](https://github.com/pgpartman/pg_partman) and [pg_jobmon](https://github.com/omniti-labs/pg_jobmon) PostgreSQL extensions.
 
 It pushes a nightly latest image of all tag versions to [ghcr.io](https://github.com/orgs/dbsystel/packages/container/package/postgresql-partman)
 
