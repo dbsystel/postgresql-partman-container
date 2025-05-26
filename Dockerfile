@@ -1,9 +1,12 @@
 ARG POSTGRESQL_VERSION="16"
+ARG JOBMON_VERSION="v1.4.1"
+ARG PARTMAN_VERSION="v5.2.4"
+
 FROM bitnami/postgresql:$POSTGRESQL_VERSION AS builder
 LABEL org.opencontainers.image.source="https://github.com/dbsystel/postgresql-partman-container"
-ARG JOBMON_VERSION="v1.4.1"
+ARG JOBMON_VERSION
 LABEL de.dbsystel.jobmon-version=$JOBMON_VERSION
-ARG PARTMAN_VERSION="v5.2.4"
+ARG PARTMAN_VERSION
 LABEL de.dbsystel.partman-version=$PARTMAN_VERSION
 ARG POSTGRESQL_VERSION
 LABEL de.dbsystel.postgres-version=$POSTGRESQL_VERSION
@@ -30,9 +33,9 @@ RUN wget "https://github.com/pgpartman/pg_partman/archive/refs/tags/${PARTMAN_VE
 
 FROM bitnami/postgresql:$POSTGRESQL_VERSION
 LABEL org.opencontainers.image.source="https://github.com/dbsystel/postgresql-partman-container"
-ARG JOBMON_VERSION="v1.4.1"
+ARG JOBMON_VERSION
 LABEL de.dbsystel.jobmon-version=$JOBMON_VERSION
-ARG PARTMAN_VERSION="v5.2.4"
+ARG PARTMAN_VERSION
 LABEL de.dbsystel.partman-version=$PARTMAN_VERSION
 ARG POSTGRESQL_VERSION
 LABEL de.dbsystel.postgres-version=$POSTGRESQL_VERSION
