@@ -16,20 +16,17 @@ jobs:
   build:
     strategy:
       matrix:
-        postgres_version: [13, 14, 15, 16, 17]
+        postgres_version: [14, 15, 16, 17]
         major: [4,5]
         include:
           - partman_version: v4.7.4
             partman_checksum: 28e4fdb83ecc16525959ae9593bfbfd077db429285f5f7d8e2468bfff6cbdbf2c81ace79a9ddeb4f00f51eb709163dbd713fe6b221a432ac2ff766f98d4cf8e4
-            default: "true"
+            default: "false"
             major: 4
           - partman_version: v5.2.4
             partman_checksum: 8328a00ce1a55a5c9173d4adbf251e784fed62413fb76bba89dd893749a720a5ecb25ee668eb0b826b8e1f2b89d9dd7da219fd797bfd9ab1a43d05f5b3ac494f
-            default: "false"
+            default: "true"
             major: 5
-        exclude:
-          - major: 5
-            postgres_version: 13 # partman 5.x does not support postgres 13
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -63,7 +60,7 @@ jobs:
         with:
           images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
           tags: |
-            type=raw,value=latest,enable=${{ matrix.postgres_version == '15' && matrix.default == 'true' }}
+            type=raw,value=latest,enable=${{ matrix.postgres_version == '17' && matrix.default == 'true' }}
             type=raw,value=${{ matrix.postgres_version }},enable=${{ matrix.default == 'true'}}
             ${{ matrix.postgres_version }}-${{ matrix.major }}
 
