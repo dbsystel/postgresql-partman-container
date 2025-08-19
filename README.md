@@ -1,3 +1,10 @@
+
+---
+⚠️ **Breaking Change (August 2025):**
+
+The base image has been switched from Bitnami to the official [postgres](https://hub.docker.com/_/postgres) image. This may affect existing workflows, configurations, and environment variables. Support for PostgreSQL 13 has also been dropped. For more information, see [Pull Request #32](https://github.com/dbsystel/postgresql-partman-container/pull/32).
+---
+
 # PostgreSQL container image with pg_partman
 
 This repo is meant to provide an OCI (Docker) container image that is based on the official [postgres](https://hub.docker.com/_/postgres) image in the alpine variant, that comes preinstalled with the [pg_partman](https://github.com/pgpartman/pg_partman) and [pg_jobmon](https://github.com/omniti-labs/pg_jobmon) PostgreSQL extensions.
