@@ -16,7 +16,7 @@ jobs:
   build:
     strategy:
       matrix:
-        postgres_version: [14, 15, 16, 17]
+        postgres_version: [14, 15, 16, 17, 18]
         major: [4,5]
         include:
           - partman_version: v4.7.4
@@ -60,7 +60,7 @@ jobs:
         with:
           images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
           tags: |
-            type=raw,value=latest,enable=${{ matrix.postgres_version == '17' && matrix.default == 'true' }}
+            type=raw,value=latest,enable=${{ matrix.postgres_version == '18' && matrix.default == 'true' }}
             type=raw,value=${{ matrix.postgres_version }},enable=${{ matrix.default == 'true'}}
             ${{ matrix.postgres_version }}-${{ matrix.major }}
 
