@@ -15,20 +15,20 @@ It pushes a nightly latest image of all tag versions to [ghcr.io](https://github
 
 ```shell
 docker run ghcr.io/dbsystel/postgresql-partman
-docker run ghcr.io/dbsystel/postgresql-partman:{14,15,16,17}
-docker run ghcr.io/dbsystel/postgresql-partman:{14-4,15-4,16-4,17-4}
-docker run ghcr.io/dbsystel/postgresql-partman:{14-5,15-5,16-5,17-5}
+docker run ghcr.io/dbsystel/postgresql-partman:{14,15,16,17,18}
+docker run ghcr.io/dbsystel/postgresql-partman:{14-4,15-4,16-4,17-4,18-4}
+docker run ghcr.io/dbsystel/postgresql-partman:{14-5,15-5,16-5,17-5,18-5}
 ```
 
 The first part of the tag represents the PostgreSQL major version, the second part represents the partman major version. If you leave out the second part, you will get the default version of partman as specified by this repository. Be aware, that this can change without notice.
 
 You can find out the actual versions used by looking at the labels of an image.
 
-`docker inspect ghcr.io/dbsystel/postgresql-partman:17`
+`docker inspect ghcr.io/dbsystel/postgresql-partman:18`
 
 ````
   "de.dbsystel.partman-version" : "v5.2.4",
-  "de.dbsystel.postgres-version" : "17",
+  "de.dbsystel.postgres-version" : "18",
 ````
 
 ## Development
